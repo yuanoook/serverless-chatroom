@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
+    <title>Serverless chatroom</title>
+
+    <style>
+        html{font-family:"PingFang HK", "Open Sans","lucida grande","Segoe UI",arial,verdana,"lucida sans unicode",tahoma,"Roboto","Helvetica Neue",Verdana,Tahoma,"Hiragino Sans GB","Microsoft YaHei","WenQuanYi Micro Hei",sans-serif;
+			font-weight:200;box-sizing:border-box;margin:0;padding:0;
+		}
+		body{max-width:100%;margin:auto;overflow:hidden;}
+		*{font-family:inherit;font-weight:inherit;box-sizing:inherit;color:inherit;}
+        [if]{display:none;}
+    </style>
+    <script>
+        //Global environment
+        window.ENV = {
+            version: /^(192\.168\.|localhost)/.test(location.host) ? Math.random() : "1.0.0"
+        }
+    </script>
+</head>
+</html>
+<body>
+    <div id="root">
+        <div component="./assets/components/app.html" version="ENV.version">loading...</div>
+    </div>
+    <script src="./assets/js/jquery.plus.min.js"></script>
+    <script src="./assets/js/app.filters.js"></script>
+    <script>
+        $(function(){
+            $('#root').render();
+        })
+    </script>
+</body>

@@ -1,0 +1,31 @@
+<style>
+{
+    overflow-x:hidden;
+    overflow-y:scroll;
+}
+</style>
+
+<div>
+    <ul rows-body></ul>
+    <script type="text/html" row-tpl>
+        <li data-src="content"></li>
+    </script>
+</div>
+
+<script>
+resize();
+$(window).on('resize',resize);
+me.on('destroy',function(){
+    $(window).off('resize',resize)
+});
+
+me.renderTable([
+    {content:'msg_test'}
+]);
+
+function resize(){
+    me.css({
+        height:$(window).height()-100
+    })
+}
+</script>

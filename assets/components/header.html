@@ -1,0 +1,33 @@
+<style>
+{
+    background:#101010;color:#fff;height:50px;line-height:50px;padding:0 20px;user-select:none;-webkit-user-select:none;
+    [voice-play-ctrl]{cursor:pointer;}
+    .setting-link{float:right;}
+}
+</style>
+
+<div>
+    <span voice-play-ctrl class="voiceplan-link">
+        voicePlay:
+        <span if="voicePlay">on</span>
+        <span if="voicePlay|isFalse">off</span>
+    </span>
+    <span data-src="user_name"></span>
+    <a class="setting-link" href="javascript:;">setting</a>
+</div>
+
+<script>
+var data = {};
+update();
+
+me.on('click','[voice-play-ctrl]',function(){
+    update({
+        voicePlay: !data.voicePlay
+    })
+})
+
+function update(update_info){
+    $.extend(data,update_info)
+    me.render(data);
+}
+</script>
