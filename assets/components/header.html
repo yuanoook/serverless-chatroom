@@ -7,10 +7,10 @@
 </style>
 
 <div>
-    <span voice-play-ctrl class="voiceplan-link">
-        voicePlay:
-        <span if="voicePlay">on</span>
-        <span if="voicePlay|isFalse">off</span>
+    <span if="soundNoticeable" voice-play-ctrl class="voiceplan-link">
+        soundNotice:
+        <span if="soundNotice">on</span>
+        <span if="soundNotice|isFalse">off</span>
     </span>
     <span class="user_name" data-src="user_name"></span>
     <a setting-open-ctrl class="setting-link" href="javascript:;">setting</a>
@@ -19,16 +19,20 @@
 <script src="../js/fakeServer.js" version="ENV.version"></script>
 <script>
 var data = {
+    soundNotice: false,
+    soundNoticeable: !!window.SpeechSynthesisUtterance,
     user_name: getUserById(window.CURRENT_USER_ID)['name']
 };
 update();
 
 me.on('click','[voice-play-ctrl]',function(){
     update({
-        voicePlay: !data.voicePlay
+        soundNotice: !data.soundNotice
     })
 }).on('click','[setting-open-ctrl]',function(){
     me.trigger('setting_open')
+}).containerOn('new_msg',function(){
+    data.soundNotice && window.speechSynthesis.speak(new SpeechSynthesisUtterance('New message!'));
 })
 
 function update(update_info){

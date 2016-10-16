@@ -26,6 +26,8 @@
 
 <script src="../js/fakeServer.js" version="ENV.version"></script>
 <script>
+var last_msg_list = [];
+
 //codes for UI update on window resize
 resize();
 
@@ -53,8 +55,15 @@ function update(){
     msg_list.forEach(function(msg){
         msg.from_user = getUserById(msg.from)
     });
+
+    if( last_msg_list.length && last_msg_list.length < msg_list.length ){
+        me.trigger('new_msg');
+    }
+
+    last_msg_list = msg_list;
+    //TODO just update different part
     me.renderTable(msg_list);
-    
+
     var me_dom = me.get(0);
     me_dom.scrollTop = me_dom.scrollHeight;
 }
