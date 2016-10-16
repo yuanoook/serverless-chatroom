@@ -1,31 +1,62 @@
 <style>
 {
-    overflow-x:hidden;
-    overflow-y:scroll;
+    overflow-x:hidden;overflow-y:scroll;
+    ul[rows-body]{list-style:none;padding:0;margin:0;
+        li{padding:10px 40px;
+            &:hover{background:#f0f2f3;}
+            .user-name{font-weight:900;}
+            .created-at{font-size:.8em;}
+        }
+    }
 }
 </style>
 
 <div>
     <ul rows-body></ul>
     <script type="text/html" row-tpl>
-        <li data-src="content"></li>
+        <li>
+            <label>
+                <span class="user-name" data-src="from_user.name"></span>
+                <span class="created-at" data-src="created_at|dateFormat"></span>
+            </label>
+            <p class="msg-content" data-src="content"></p>
+        </li>
     </script>
 </div>
 
+<script src="../js/fakeServer.js" version="ENV.version"></script>
 <script>
+//codes for UI update on window resize
 resize();
+
 $(window).on('resize',resize);
+
 me.on('destroy',function(){
     $(window).off('resize',resize)
 });
-
-me.renderTable([
-    {content:'msg_test'}
-]);
 
 function resize(){
     me.css({
         height:$(window).height()-100
     })
 }
+
+//codes for msg list update
+update();
+
+me.containerOn('msg_list_udpated',function(){
+    update();
+})
+
+function update(){
+    var msg_list = getMsgList();
+    msg_list.forEach(function(msg){
+        msg.from_user = getUserById(msg.from)
+    });
+    me.renderTable(msg_list);
+    
+    var me_dom = me.get(0);
+    me_dom.scrollTop = me_dom.scrollHeight;
+}
+
 </script>

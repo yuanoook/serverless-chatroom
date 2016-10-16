@@ -5,7 +5,8 @@ localStorage.serverless_chatroom = localStorage.serverless_chatroom || JSON.stri
 
 function addMsg(obj){
     var msg = $.extend({
-        id: $.randomId()
+        id: $.randomId(),
+        created_at: new Date().valueOf()
     },obj);
     var msg_list = getMsgList();
     msg_list.push(msg);

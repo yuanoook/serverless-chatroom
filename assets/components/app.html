@@ -1,8 +1,3 @@
-<style>
-{
-}
-</style>
-
 <div>
     <div if="login">
         <div component="./login.html" version="ENV.version"></div>
@@ -17,10 +12,26 @@
     </div>
 </div>
 
-<script src="./app.js" version="ENV.version"></script>
+<script src="../js/fakeServer.js" version="ENV.version"></script>
 <script>
 window.CURRENT_USER_ID;
+//codes for msg
+me.on('msg_submit',function(e){
+    var msg = e.msg;
+    var new_msg_id = addMsg({
+        from: window.CURRENT_USER_ID,
+        content: msg
+    })
+    new_msg_id && me.trigger('msg_list_udpated')
+})
 
+$(window).on('storage',function(e){
+    if(e.originalEvent.key==='serverless_chatroom'){
+        me.trigger('msg_list_udpated')
+    }
+});
+
+//codes for login page
 me.render({
     login: true
 })
@@ -46,16 +57,8 @@ me.on('login_success',function(e){
     })
 })
 
-me.on('update_user_name',function(e){
-    var user_name = e.user_name;
-    var updated_user_id = updateUserNameById(window.CURRENT_USER_ID, user_name);
-    if(updated_user_id){
-        me.trigger('update_user_name_success')
-    }else{
-        me.trigger('update_user_name_failed')
-    }
-})
 
+//codes for setting page
 me.on('setting_open',function(){
     me.reload({
         setting: true
@@ -68,6 +71,17 @@ me.on('setting_close',function(){
     })
 })
 
+me.on('update_user_name',function(e){
+    var user_name = e.user_name;
+    var updated_user_id = updateUserNameById(window.CURRENT_USER_ID, user_name);
+    if(updated_user_id){
+        me.trigger('update_user_name_success')
+    }else{
+        me.trigger('update_user_name_failed')
+    }
+})
+
+//codes for logout
 $(window).on('beforeunload',function(){
     window.CURRENT_USER_ID && logoutUserById(window.CURRENT_USER_ID);
 })
