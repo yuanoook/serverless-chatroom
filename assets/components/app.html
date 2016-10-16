@@ -25,6 +25,10 @@ me.on('msg_submit',function(e){
     new_msg_id && me.trigger('msg_list_udpated')
 })
 
+me.on('msg_deleted',function(){
+    me.trigger('msg_list_udpated')
+})
+
 $(window).on('storage',function(e){
     if(e.originalEvent.key==='serverless_chatroom'){
         me.trigger('msg_list_udpated')

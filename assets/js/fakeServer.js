@@ -69,11 +69,13 @@ function addUser(obj){
 function deleteMsgById(msg_id){
     var msg = getMsgById(msg_id);
     if(!msg || msg.deleted){
-        return;
+        return false;
     }
     updateMsgById(msg.id,{
         deleted: true
     })
+
+    return true;
 }
 
 function updateMsgById(msg_id,obj){
@@ -83,10 +85,11 @@ function updateMsgById(msg_id,obj){
             $.extend(msg,obj)
         }
     })
+    
     localStorage.serverless_chatroom = JSON.stringify({
         msg_list: msg_list,
         user_list: getUserList()
-    })
+    });
 }
 
 function updateUserNameById(user_id,user_name){

@@ -2,10 +2,14 @@
 {
     overflow-x:hidden;overflow-y:scroll;
     ul[rows-body]{list-style:none;padding:0;margin:0;
-        li{padding:10px 40px;
-            &:hover{background:#f0f2f3;}
+        li{padding:10px 40px;position:relative;
+            &:hover{background:#f0f2f3;
+                [delete]{display:block;}
+            }
             .user-name{font-weight:900;}
             .created-at{font-size:.8em;}
+            .delete-wrap{position:absolute;top:10px;right:10px;}
+            [delete]{display:none;}
         }
     }
 }
@@ -20,6 +24,9 @@
                 <span class="created-at" data-src="created_at|dateFormat"></span>
             </label>
             <p class="msg-content" data-src="content"></p>
+            <span class="delete-wrap" if="from|equalGolbalVariable:CURRENT_USER_ID">
+                <a delete href="javascript:;">delete</a>
+            </span>
         </li>
     </script>
 </div>
@@ -52,6 +59,11 @@ me.containerOn('msg_list_udpated',function(){
 
 function update(){
     var msg_list = getMsgList();
+
+    msg_list = msg_list.filter(function(msg){
+        return !msg.deleted
+    });
+
     msg_list.forEach(function(msg){
         msg.from_user = getUserById(msg.from)
     });
@@ -67,5 +79,14 @@ function update(){
     var me_dom = me.get(0);
     me_dom.scrollTop = me_dom.scrollHeight;
 }
+
+me.on('click','[delete]',function(){
+    var row = $(this).closest('li');
+    var msg = row.getCoreData();
+    var msg_id = msg.id;
+    if( deleteMsgById(msg_id) ){
+        me.trigger('msg_deleted')
+    }
+});
 
 </script>
