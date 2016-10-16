@@ -1,7 +1,7 @@
 <style>
 {
-    background:#101010;color:#fff;height:50px;line-height:50px;padding:0 20px;user-select:none;-webkit-user-select:none;
-    [voice-play-ctrl]{cursor:pointer;}
+    background:#101010;color:#fff;height:50px;line-height:50px;padding:0 20px;user-select:none;-webkit-user-select:none;text-align:center;
+    [voice-play-ctrl]{cursor:pointer;float:left;}
     .setting-link{float:right;}
 }
 </style>
@@ -12,18 +12,23 @@
         <span if="voicePlay">on</span>
         <span if="voicePlay|isFalse">off</span>
     </span>
-    <span data-src="user_name"></span>
-    <a class="setting-link" href="javascript:;">setting</a>
+    <span class="user_name" data-src="user_name"></span>
+    <a setting-open-ctrl class="setting-link" href="javascript:;">setting</a>
 </div>
 
+<script src="./app.js" version="ENV.version"></script>
 <script>
-var data = {};
+var data = {
+    user_name: getUserById(window.CURRENT_USER_ID)['name']
+};
 update();
 
 me.on('click','[voice-play-ctrl]',function(){
     update({
         voicePlay: !data.voicePlay
     })
+}).on('click','[setting-open-ctrl]',function(){
+    me.trigger('setting_open')
 })
 
 function update(update_info){

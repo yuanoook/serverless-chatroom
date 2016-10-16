@@ -4,11 +4,71 @@
 </style>
 
 <div>
-    <div component="./header.html" version="ENV.version"></div>
-    <div component="./body.html" version="ENV.version"></div>
-    <div component="./footer.html" version="ENV.version"></div>
+    <div if="login">
+        <div component="./login.html" version="ENV.version"></div>
+    </div>
+    <div if="chatroom">
+        <div component="./header.html" version="ENV.version"></div>
+        <div component="./body.html" version="ENV.version"></div>
+        <div component="./footer.html" version="ENV.version"></div>
+    </div>
+    <div if="setting">
+        <div component="./setting.html" version="ENV.version"></div>
+    </div>
 </div>
 
+<script src="./app.js" version="ENV.version"></script>
 <script>
-me.render()
+window.CURRENT_USER_ID;
+
+me.render({
+    login: true
+})
+
+me.on('login',function(e){
+    var user_name = e.user_name;
+    var user_id = loginUserByName(user_name);
+
+    if(!user_id){
+        me.trigger('login_failed')
+    }else{
+        me.trigger({
+            type: 'login_success',
+            user_id: user_id
+        })
+    }
+})
+
+me.on('login_success',function(e){
+    window.CURRENT_USER_ID = e.user_id;
+    me.reload({
+        chatroom: true
+    })
+})
+
+me.on('update_user_name',function(e){
+    var user_name = e.user_name;
+    var updated_user_id = updateUserNameById(window.CURRENT_USER_ID, user_name);
+    if(updated_user_id){
+        me.trigger('update_user_name_success')
+    }else{
+        me.trigger('update_user_name_failed')
+    }
+})
+
+me.on('setting_open',function(){
+    me.reload({
+        setting: true
+    })
+})
+
+me.on('setting_close',function(){
+    me.reload({
+        chatroom: true
+    })
+})
+
+$(window).on('beforeunload',function(){
+    window.CURRENT_USER_ID && logoutUserById(window.CURRENT_USER_ID);
+})
 </script>

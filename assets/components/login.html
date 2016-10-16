@@ -1,0 +1,40 @@
+<style>
+{text-align:center;padding:50px 0 0;
+    label{display:block;height:30px;line-height:30px;margin-bottom:20px;font-size:16px;
+        input{padding:0 5px;font-size:16px;}
+    }
+    button{width:100px;height:30px;text-align:center;-webkit-appearance:none;appearance:none;border:0;background:#aaa;cursor:pointer;font-size:16px;
+        &:hover{background:#bbb;}
+    }
+    .error-msg{color:red;font-size:12px;}
+}
+</style>
+
+<div>
+    <label>
+        <span>Name:</span>
+        <input type="text" placeholder="Input your name">
+    </label>
+    <p class="error-msg" data-src="error_msg"></p>
+    <button>Login</button>
+</div>
+
+<script>
+me.find('button').on('click',function(){
+    var user_name = me.find('input').val().trim();
+    if(user_name){
+        me.trigger({
+            type: 'login',
+            user_name: user_name
+        })
+    }else{
+        me.find('input').focus()
+    }
+});
+
+me.containerOn('login_failed',function(){
+    me.render({
+        error_msg: 'User is already logged in from another window.'
+    })
+})
+</script>
